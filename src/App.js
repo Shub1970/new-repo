@@ -1,22 +1,20 @@
 import "./App.css";
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 function App() {
   const [second, setSecond] = useState(60);
-  const interval = useRef(0);
-  const handelStart = (e) => {
-    if (!interval.current) {
-      const inter = setInterval(() => {
-        setSecond((previous) => previous - 1);
-      }, 100);
-      console.log("hellow world");
-      interval.current = inter;
-      console.log(interval.current);
+  const [isrunning, setIsrunning] = useState(false);
+  const [inter, setInter] = useState();
+  useEffect(() => {
+    if (isrunning === true) {
+      const i = setInterval(() => {
+        setSecond((previous) => setSecond(previous - 1));
+      }, 1000);
+      setInter(i);
     }
-  };
-  const handelstop = (e) => {
-    clearInterval(interval.current);
-    interval.current = 0;
-  };
+    if (isrunning === false) {
+      clearInterval(inter);
+    }
+  }, [isrunning]);
   return (
     <>
       <div className="time-block">
@@ -24,10 +22,10 @@ function App() {
         <div className="minute"></div>
       </div>
       <div>
-        <button className="start" onClick={handelStart}>
+        <button className="start" onClick={() => setIsrunning(true)}>
           start
         </button>
-        <button className="stop" onClick={handelstop}>
+        <button className="stop" onClick={() => setIsrunning(false)}>
           end
         </button>
       </div>
